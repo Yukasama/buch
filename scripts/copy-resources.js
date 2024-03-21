@@ -18,7 +18,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const { cpSync, existsSync, mkdirSync } = fs;
-const { join } = path
+const { join } = path;
 
 // BEACHTE: "assets" innerhalb von nest-cli.json werden bei "--watch" NICHT beruecksichtigt
 // https://docs.nestjs.com/cli/monorepo#global-compiler-options
@@ -26,7 +26,7 @@ const { join } = path
 const src = 'src';
 const dist = 'dist';
 if (!existsSync(dist)) {
-    mkdirSync(dist);
+  mkdirSync(dist);
 }
 
 // DB-Skripte, PEM-Dateien fuer TLS und GraphQL-Schema kopieren

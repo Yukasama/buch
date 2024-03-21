@@ -23,20 +23,21 @@ dotenv.config();
 const sonarToken = process.env.SONAR_TOKEN;
 
 scanner(
-    {
-        serverUrl: 'http://localhost:9000',
-        options: {
-            'sonar.projectName': 'buch',
-            'sonar.projectDescription': 'Beispiel fuer Software Engineering',
-            'sonar.projectVersion': '2024.04.0',
-            'sonar.sources': 'src',
-            'sonar.tests': '__tests__',
-            'sonar.token': sonarToken,
-            'sonar.scm.disabled': 'true',
-            'sonar.javascript.environments': 'node',
-            'sonar.exclusions': 'node_modules/**,.extras/**,.scannerwork/*,.vscode/*,coverage/**,dist/*,log/*',
-            'sonar.javascript.lcov.reportPaths': './coverage/lcov.info',
-        },
+  {
+    serverUrl: 'http://localhost:9000',
+    options: {
+      'sonar.projectName': 'buch',
+      'sonar.projectDescription': 'Beispiel fuer Software Engineering',
+      'sonar.projectVersion': '2024.04.0',
+      'sonar.sources': 'src',
+      'sonar.tests': '__tests__',
+      'sonar.token': sonarToken,
+      'sonar.scm.disabled': 'true',
+      'sonar.javascript.environments': 'node',
+      'sonar.exclusions':
+        'node_modules/**,.extras/**,.scannerwork/*,.vscode/*,coverage/**,dist/*,log/*',
+      'sonar.javascript.lcov.reportPaths': './coverage/lcov.info',
     },
-    () => process.exit(),
+  },
+  () => process.exit(),
 );
