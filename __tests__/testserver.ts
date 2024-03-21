@@ -15,9 +15,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import {
-    HttpStatus,
-    type INestApplication,
-    ValidationPipe,
+  HttpStatus,
+  type INestApplication,
+  ValidationPipe,
 } from '@nestjs/common';
 import { Agent } from 'node:https';
 import { AppModule } from '../src/app.module.js';
@@ -46,71 +46,71 @@ const dockerComposeDir = join('.extras', 'compose');
 
 let dbHealthCheck: string;
 switch (dbType) {
-    case 'postgres': {
-        dbHealthCheck = 'until pg_isready; do sleep 1; done';
-        break;
-    }
-    case 'mysql': {
-        dbHealthCheck = 'until healthcheck.sh; do sleep 1; done';
-        break;
-    }
-    case 'oracle': {
-        dbHealthCheck = 'until ping; do sleep 1; done';
-        break;
-    }
-    // 'better-sqlite3' erfordert Python zum Uebersetzen, wenn das Docker-Image gebaut wird
-    case 'sqlite': {
-        dbHealthCheck = '';
-        break;
-    }
+  case 'postgres': {
+    dbHealthCheck = 'until pg_isready; do sleep 1; done';
+    break;
+  }
+  case 'mysql': {
+    dbHealthCheck = 'until healthcheck.sh; do sleep 1; done';
+    break;
+  }
+  case 'oracle': {
+    dbHealthCheck = 'until ping; do sleep 1; done';
+    break;
+  }
+  // 'better-sqlite3' erfordert Python zum Uebersetzen, wenn das Docker-Image gebaut wird
+  case 'sqlite': {
+    dbHealthCheck = '';
+    break;
+  }
 }
 
 // -----------------------------------------------------------------------------
 // D B - S e r v e r   m i t   D o c k e r   C o m p o s e
 // -----------------------------------------------------------------------------
 const startDbServer = async () => {
-    // 'better-sqlite3' erfordert Python zum Uebersetzen, wenn das Docker-Image gebaut wird
-    if (dbType === 'sqlite') {
-        return;
-    }
-    const isDBReachable = await isPortReachable(dbPort, { host: 'localhost' });
-    if (isDBReachable) {
-        console.info('DB-Server bereits gestartet.');
-        return;
-    }
+  // 'better-sqlite3' erfordert Python zum Uebersetzen, wenn das Docker-Image gebaut wird
+  if (dbType === 'sqlite') {
+    return;
+  }
+  const isDBReachable = await isPortReachable(dbPort, { host: 'localhost' });
+  if (isDBReachable) {
+    console.info('DB-Server bereits gestartet.');
+    return;
+  }
 
-    // Container starten
-    console.info('Docker-Container mit DB-Server wird gestartet.');
-    try {
-        await compose.upAll({
-            cwd: dockerComposeDir,
-            commandOptions: [dbType],
-            composeOptions: [['-f', `compose.${dbType}.yml`]],
-            // Logging beim Hochfahren des DB-Containers
-            log: true,
-        });
-    } catch (err: unknown) {
-        console.error(`startDbServer: ${JSON.stringify(err)}`);
-        return;
-    }
-
-    // Ist der DB-Server im Container bereit fuer DB-Anfragen?
-    await compose.exec(dbType, ['sh', '-c', dbHealthCheck], {
-        cwd: dockerComposeDir,
+  // Container starten
+  console.info('Docker-Container mit DB-Server wird gestartet.');
+  try {
+    await compose.upAll({
+      cwd: dockerComposeDir,
+      commandOptions: [dbType],
+      composeOptions: [['-f', `compose.${dbType}.yml`]],
+      // Logging beim Hochfahren des DB-Containers
+      log: true,
     });
-    console.info('Docker-Container mit DB-Server ist gestartet.');
+  } catch (err: unknown) {
+    console.error(`startDbServer: ${JSON.stringify(err)}`);
+    return;
+  }
+
+  // Ist der DB-Server im Container bereit fuer DB-Anfragen?
+  await compose.exec(dbType, ['sh', '-c', dbHealthCheck], {
+    cwd: dockerComposeDir,
+  });
+  console.info('Docker-Container mit DB-Server ist gestartet.');
 };
 
 const shutdownDbServer = async () => {
-    // 'better-sqlite3' erfordert Python zum Uebersetzen, wenn das Docker-Image gebaut wird
-    if (dbType === 'sqlite') {
-        return;
-    }
-    await compose.down({
-        cwd: dockerComposeDir,
-        composeOptions: [['-f', 'compose.postgres.yml']],
-        log: true,
-    });
+  // 'better-sqlite3' erfordert Python zum Uebersetzen, wenn das Docker-Image gebaut wird
+  if (dbType === 'sqlite') {
+    return;
+  }
+  await compose.down({
+    cwd: dockerComposeDir,
+    composeOptions: [['-f', 'compose.postgres.yml']],
+    log: true,
+  });
 };
 
 // -----------------------------------------------------------------------------
@@ -119,45 +119,45 @@ const shutdownDbServer = async () => {
 let server: INestApplication;
 
 export const startServer = async () => {
-    if (
-        env.START_DB_SERVER === 'true' ||
-        env.START_DB_SERVER === 'TRUE' ||
-        config.test?.startDbServer === true
-    ) {
-        console.info('DB-Server muss gestartet werden.');
-        await startDbServer();
-    }
+  if (
+    env.START_DB_SERVER === 'true' ||
+    env.START_DB_SERVER === 'TRUE' ||
+    config.test?.startDbServer === true
+  ) {
+    console.info('DB-Server muss gestartet werden.');
+    await startDbServer();
+  }
 
-    server = await NestFactory.create(AppModule, {
-        httpsOptions,
-        logger: ['log'],
-        // logger: ['debug'],
-    });
-    server.useGlobalPipes(
-        new ValidationPipe({
-            errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-        }),
-    );
+  server = await NestFactory.create(AppModule, {
+    httpsOptions,
+    logger: ['log'],
+    // logger: ['debug'],
+  });
+  server.useGlobalPipes(
+    new ValidationPipe({
+      errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+    }),
+  );
 
-    await server.listen(port);
-    return server;
+  await server.listen(port);
+  return server;
 };
 
 export const shutdownServer = async () => {
-    try {
-        await server.close();
-    } catch {
-        console.warn('Der Server wurde fehlerhaft beendet.');
-    }
+  try {
+    await server.close();
+  } catch {
+    console.warn('Der Server wurde fehlerhaft beendet.');
+  }
 
-    if (env.START_DB_SERVER === 'true' || env.START_DB_SERVER === 'TRUE') {
-        await shutdownDbServer();
-    }
+  if (env.START_DB_SERVER === 'true' || env.START_DB_SERVER === 'TRUE') {
+    await shutdownDbServer();
+  }
 };
 
 // fuer selbst-signierte Zertifikate
 export const httpsAgent = new Agent({
-    requestCert: true,
-    rejectUnauthorized: false,
-    ca: httpsOptions.cert as Buffer,
+  requestCert: true,
+  rejectUnauthorized: false,
+  ca: httpsOptions.cert as Buffer,
 });

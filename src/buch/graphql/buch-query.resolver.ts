@@ -25,63 +25,59 @@ import { type Suchkriterien } from '../service/suchkriterien.js';
 import { getLogger } from '../../logger/logger.js';
 
 export interface IdInput {
-    readonly id: number;
+  readonly id: number;
 }
 
 export interface SuchkriterienInput {
-    readonly suchkriterien: Suchkriterien;
+  readonly suchkriterien: Suchkriterien;
 }
 
 @Resolver((_: any) => Buch)
 @UseFilters(HttpExceptionFilter)
 @UseInterceptors(ResponseTimeInterceptor)
 export class BuchQueryResolver {
-    readonly #service: BuchReadService;
+  readonly #service: BuchReadService;
 
-    readonly #logger = getLogger(BuchQueryResolver.name);
+  readonly #logger = getLogger(BuchQueryResolver.name);
 
-    constructor(service: BuchReadService) {
-        this.#service = service;
+  constructor(service: BuchReadService) {
+    this.#service = service;
+  }
+
+  @Query('buch')
+  @Public()
+  async findById(@Args() { id }: IdInput) {
+    this.#logger.debug('findById: id=%d', id);
+
+    const buch = await this.#service.findById({ id });
+
+    if (this.#logger.isLevelEnabled('debug')) {
+      this.#logger.debug(
+        'findById: buch=%s, titel=%o',
+        buch.toString(),
+        buch.titel,
+      );
     }
+    return buch;
+  }
 
-    @Query('buch')
-    @Public()
-    async findById(@Args() { id }: IdInput) {
-        this.#logger.debug('findById: id=%d', id);
+  @Query('buecher')
+  @Public()
+  async find(@Args() input: SuchkriterienInput | undefined) {
+    this.#logger.debug('find: input=%o', input);
+    const buecher = await this.#service.find(input?.suchkriterien);
+    this.#logger.debug('find: buecher=%o', buecher);
+    return buecher;
+  }
 
-        const buch = await this.#service.findById({ id });
-
-        if (this.#logger.isLevelEnabled('debug')) {
-            this.#logger.debug(
-                'findById: buch=%s, titel=%o',
-                buch.toString(),
-                buch.titel,
-            );
-        }
-        return buch;
+  @ResolveField('rabatt')
+  rabatt(@Parent() buch: Buch, short: boolean | undefined) {
+    if (this.#logger.isLevelEnabled('debug')) {
+      this.#logger.debug('rabatt: buch=%s, short=%s', buch.toString(), short);
     }
-
-    @Query('buecher')
-    @Public()
-    async find(@Args() input: SuchkriterienInput | undefined) {
-        this.#logger.debug('find: input=%o', input);
-        const buecher = await this.#service.find(input?.suchkriterien);
-        this.#logger.debug('find: buecher=%o', buecher);
-        return buecher;
-    }
-
-    @ResolveField('rabatt')
-    rabatt(@Parent() buch: Buch, short: boolean | undefined) {
-        if (this.#logger.isLevelEnabled('debug')) {
-            this.#logger.debug(
-                'rabatt: buch=%s, short=%s',
-                buch.toString(),
-                short,
-            );
-        }
-        const rabatt = buch.rabatt ?? 0;
-        const shortStr = short === undefined || short ? '%' : 'Prozent';
-        // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-        return `${(rabatt * 100).toFixed(2)} ${shortStr}`;
-    }
+    const rabatt = buch.rabatt ?? 0;
+    const shortStr = short === undefined || short ? '%' : 'Prozent';
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    return `${(rabatt * 100).toFixed(2)} ${shortStr}`;
+  }
 }

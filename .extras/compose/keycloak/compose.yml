@@ -39,7 +39,7 @@ services:
         target: 8443
     volumes:
       - type: bind
-        source: /Users/yukasama/volumes/keycloak
+        source: ~/volumes/keycloak
         # mit Unterverzeichnis h2
         target: /opt/keycloak/data
       - type: bind

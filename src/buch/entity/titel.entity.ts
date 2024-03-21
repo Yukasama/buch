@@ -16,34 +16,34 @@
  */
 
 import {
-    Column,
-    Entity,
-    JoinColumn,
-    OneToOne,
-    PrimaryGeneratedColumn,
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Buch } from './buch.entity.js';
 
 @Entity()
 export class Titel {
-    // https://typeorm.io/entities#primary-columns
-    @PrimaryGeneratedColumn()
-    id: number | undefined;
+  // https://typeorm.io/entities#primary-columns
+  @PrimaryGeneratedColumn()
+  id: number | undefined;
 
-    @Column()
-    readonly titel!: string;
+  @Column()
+  readonly titel!: string;
 
-    @Column('varchar')
-    readonly untertitel: string | undefined;
+  @Column('varchar')
+  readonly untertitel: string | undefined;
 
-    @OneToOne(() => Buch, (buch) => buch.titel)
-    @JoinColumn({ name: 'buch_id' })
-    buch: Buch | undefined;
+  @OneToOne(() => Buch, (buch) => buch.titel)
+  @JoinColumn({ name: 'buch_id' })
+  buch: Buch | undefined;
 
-    public toString = (): string =>
-        JSON.stringify({
-            id: this.id,
-            titel: this.titel,
-            untertitel: this.untertitel,
-        });
+  public toString = (): string =>
+    JSON.stringify({
+      id: this.id,
+      titel: this.titel,
+      untertitel: this.untertitel,
+    });
 }

@@ -40,20 +40,20 @@ import { getLogger } from '../../logger/logger.js';
 //      https://www.the-guild.dev/blog/graphql-authz
 
 export interface CreatePayload {
-    readonly id: number;
+  readonly id: number;
 }
 
 export interface UpdatePayload {
-    readonly version: number;
+  readonly version: number;
 }
 
 export class BuchUpdateDTO extends BuchDTO {
-    @IsNumberString()
-    readonly id!: string;
+  @IsNumberString()
+  readonly id!: string;
 
-    @IsInt()
-    @Min(0)
-    readonly version!: number;
+  @IsInt()
+  @Min(0)
+  readonly version!: number;
 }
 @Resolver()
 // alternativ: globale Aktivierung der Guards https://docs.nestjs.com/security/authorization#basic-rbac-implementation
@@ -61,141 +61,141 @@ export class BuchUpdateDTO extends BuchDTO {
 @UseFilters(HttpExceptionFilter)
 @UseInterceptors(ResponseTimeInterceptor)
 export class BuchMutationResolver {
-    readonly #service: BuchWriteService;
+  readonly #service: BuchWriteService;
 
-    readonly #logger = getLogger(BuchMutationResolver.name);
+  readonly #logger = getLogger(BuchMutationResolver.name);
 
-    constructor(service: BuchWriteService) {
-        this.#service = service;
-    }
+  constructor(service: BuchWriteService) {
+    this.#service = service;
+  }
 
-    @Mutation()
-    @Roles({ roles: ['admin', 'user'] })
-    async create(@Args('input') buchDTO: BuchDTO) {
-        this.#logger.debug('create: buchDTO=%o', buchDTO);
+  @Mutation()
+  @Roles({ roles: ['admin', 'user'] })
+  async create(@Args('input') buchDTO: BuchDTO) {
+    this.#logger.debug('create: buchDTO=%o', buchDTO);
 
-        const buch = this.#buchDtoToBuch(buchDTO);
-        const id = await this.#service.create(buch);
-        // TODO BadUserInputError
-        this.#logger.debug('createBuch: id=%d', id);
-        const payload: CreatePayload = { id };
-        return payload;
-    }
+    const buch = this.#buchDtoToBuch(buchDTO);
+    const id = await this.#service.create(buch);
+    // TODO BadUserInputError
+    this.#logger.debug('createBuch: id=%d', id);
+    const payload: CreatePayload = { id };
+    return payload;
+  }
 
-    @Mutation()
-    @Roles({ roles: ['admin', 'user'] })
-    async update(@Args('input') buchDTO: BuchUpdateDTO) {
-        this.#logger.debug('update: buch=%o', buchDTO);
+  @Mutation()
+  @Roles({ roles: ['admin', 'user'] })
+  async update(@Args('input') buchDTO: BuchUpdateDTO) {
+    this.#logger.debug('update: buch=%o', buchDTO);
 
-        const buch = this.#buchUpdateDtoToBuch(buchDTO);
-        const versionStr = `"${buchDTO.version.toString()}"`;
+    const buch = this.#buchUpdateDtoToBuch(buchDTO);
+    const versionStr = `"${buchDTO.version.toString()}"`;
 
-        const versionResult = await this.#service.update({
-            id: Number.parseInt(buchDTO.id, 10),
-            buch,
-            version: versionStr,
-        });
-        // TODO BadUserInputError
-        this.#logger.debug('updateBuch: versionResult=%d', versionResult);
-        const payload: UpdatePayload = { version: versionResult };
-        return payload;
-    }
+    const versionResult = await this.#service.update({
+      id: Number.parseInt(buchDTO.id, 10),
+      buch,
+      version: versionStr,
+    });
+    // TODO BadUserInputError
+    this.#logger.debug('updateBuch: versionResult=%d', versionResult);
+    const payload: UpdatePayload = { version: versionResult };
+    return payload;
+  }
 
-    @Mutation()
-    @Roles({ roles: ['admin'] })
-    async delete(@Args() id: IdInput) {
-        const idStr = id.id;
-        this.#logger.debug('delete: id=%s', idStr);
-        const deletePerformed = await this.#service.delete(idStr);
-        this.#logger.debug('deleteBuch: deletePerformed=%s', deletePerformed);
-        return deletePerformed;
-    }
+  @Mutation()
+  @Roles({ roles: ['admin'] })
+  async delete(@Args() id: IdInput) {
+    const idStr = id.id;
+    this.#logger.debug('delete: id=%s', idStr);
+    const deletePerformed = await this.#service.delete(idStr);
+    this.#logger.debug('deleteBuch: deletePerformed=%s', deletePerformed);
+    return deletePerformed;
+  }
 
-    #buchDtoToBuch(buchDTO: BuchDTO): Buch {
-        const titelDTO = buchDTO.titel;
-        const titel: Titel = {
-            id: undefined,
-            titel: titelDTO.titel,
-            untertitel: titelDTO.untertitel,
-            buch: undefined,
-        };
-        const abbildungen = buchDTO.abbildungen?.map((abbildungDTO) => {
-            const abbildung: Abbildung = {
-                id: undefined,
-                beschriftung: abbildungDTO.beschriftung,
-                contentType: abbildungDTO.contentType,
-                buch: undefined,
-            };
-            return abbildung;
-        });
-        const buch: Buch = {
-            id: undefined,
-            version: undefined,
-            isbn: buchDTO.isbn,
-            rating: buchDTO.rating,
-            art: buchDTO.art,
-            preis: buchDTO.preis,
-            rabatt: buchDTO.rabatt,
-            lieferbar: buchDTO.lieferbar,
-            datum: buchDTO.datum,
-            homepage: buchDTO.homepage,
-            schlagwoerter: buchDTO.schlagwoerter,
-            titel,
-            abbildungen,
-            erzeugt: new Date(),
-            aktualisiert: new Date(),
-        };
+  #buchDtoToBuch(buchDTO: BuchDTO): Buch {
+    const titelDTO = buchDTO.titel;
+    const titel: Titel = {
+      id: undefined,
+      titel: titelDTO.titel,
+      untertitel: titelDTO.untertitel,
+      buch: undefined,
+    };
+    const abbildungen = buchDTO.abbildungen?.map((abbildungDTO) => {
+      const abbildung: Abbildung = {
+        id: undefined,
+        beschriftung: abbildungDTO.beschriftung,
+        contentType: abbildungDTO.contentType,
+        buch: undefined,
+      };
+      return abbildung;
+    });
+    const buch: Buch = {
+      id: undefined,
+      version: undefined,
+      isbn: buchDTO.isbn,
+      rating: buchDTO.rating,
+      art: buchDTO.art,
+      preis: buchDTO.preis,
+      rabatt: buchDTO.rabatt,
+      lieferbar: buchDTO.lieferbar,
+      datum: buchDTO.datum,
+      homepage: buchDTO.homepage,
+      schlagwoerter: buchDTO.schlagwoerter,
+      titel,
+      abbildungen,
+      erzeugt: new Date(),
+      aktualisiert: new Date(),
+    };
 
-        // Rueckwaertsverweis
-        buch.titel!.buch = buch;
-        return buch;
-    }
+    // Rueckwaertsverweis
+    buch.titel!.buch = buch;
+    return buch;
+  }
 
-    #buchUpdateDtoToBuch(buchDTO: BuchUpdateDTO): Buch {
-        return {
-            id: undefined,
-            version: undefined,
-            isbn: buchDTO.isbn,
-            rating: buchDTO.rating,
-            art: buchDTO.art,
-            preis: buchDTO.preis,
-            rabatt: buchDTO.rabatt,
-            lieferbar: buchDTO.lieferbar,
-            datum: buchDTO.datum,
-            homepage: buchDTO.homepage,
-            schlagwoerter: buchDTO.schlagwoerter,
-            titel: undefined,
-            abbildungen: undefined,
-            erzeugt: undefined,
-            aktualisiert: new Date(),
-        };
-    }
+  #buchUpdateDtoToBuch(buchDTO: BuchUpdateDTO): Buch {
+    return {
+      id: undefined,
+      version: undefined,
+      isbn: buchDTO.isbn,
+      rating: buchDTO.rating,
+      art: buchDTO.art,
+      preis: buchDTO.preis,
+      rabatt: buchDTO.rabatt,
+      lieferbar: buchDTO.lieferbar,
+      datum: buchDTO.datum,
+      homepage: buchDTO.homepage,
+      schlagwoerter: buchDTO.schlagwoerter,
+      titel: undefined,
+      abbildungen: undefined,
+      erzeugt: undefined,
+      aktualisiert: new Date(),
+    };
+  }
 
-    // #errorMsgCreateBuch(err: CreateError) {
-    //     switch (err.type) {
-    //         case 'IsbnExists': {
-    //             return `Die ISBN ${err.isbn} existiert bereits`;
-    //         }
-    //         default: {
-    //             return 'Unbekannter Fehler';
-    //         }
-    //     }
-    // }
+  // #errorMsgCreateBuch(err: CreateError) {
+  //     switch (err.type) {
+  //         case 'IsbnExists': {
+  //             return `Die ISBN ${err.isbn} existiert bereits`;
+  //         }
+  //         default: {
+  //             return 'Unbekannter Fehler';
+  //         }
+  //     }
+  // }
 
-    // #errorMsgUpdateBuch(err: UpdateError) {
-    //     switch (err.type) {
-    //         case 'BuchNotExists': {
-    //             return `Es gibt kein Buch mit der ID ${err.id}`;
-    //         }
-    //         case 'VersionInvalid': {
-    //             return `"${err.version}" ist keine gueltige Versionsnummer`;
-    //         }
-    //         case 'VersionOutdated': {
-    //             return `Die Versionsnummer "${err.version}" ist nicht mehr aktuell`;
-    //         }
-    //         default: {
-    //             return 'Unbekannter Fehler';
-    //         }
-    //     }
-    // }
+  // #errorMsgUpdateBuch(err: UpdateError) {
+  //     switch (err.type) {
+  //         case 'BuchNotExists': {
+  //             return `Es gibt kein Buch mit der ID ${err.id}`;
+  //         }
+  //         case 'VersionInvalid': {
+  //             return `"${err.version}" ist keine gueltige Versionsnummer`;
+  //         }
+  //         case 'VersionOutdated': {
+  //             return `Die Versionsnummer "${err.version}" ist nicht mehr aktuell`;
+  //         }
+  //         default: {
+  //             return 'Unbekannter Fehler';
+  //         }
+  //     }
+  // }
 }

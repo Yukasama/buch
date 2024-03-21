@@ -28,7 +28,7 @@ import { ResponseTimeInterceptor } from './response-time.interceptor.js';
  */
 @Global()
 @Module({
-    providers: [BannerService, ResponseTimeInterceptor],
-    exports: [BannerService, ResponseTimeInterceptor],
+  providers: [BannerService, ResponseTimeInterceptor],
+  exports: [BannerService, ResponseTimeInterceptor],
 })
 export class LoggerModule {}

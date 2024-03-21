@@ -32,10 +32,10 @@ const prettyPrint: string | undefined = config.health?.prettyPrint;
 // "as const" fuer readonly
 // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions
 export const healthConfig = {
-    prettyPrint:
-        prettyPrint !== undefined && prettyPrint.toLowerCase() === 'true',
+  prettyPrint:
+    prettyPrint !== undefined && prettyPrint.toLowerCase() === 'true',
 } as const;
 
 if (!loggerDefaultValue) {
-    console.debug('healthConfig: %o', healthConfig);
+  console.debug('healthConfig: %o', healthConfig);
 }

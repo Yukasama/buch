@@ -22,9 +22,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-    imports: [KeycloakModule, TypeOrmModule.forFeature([Buch])],
-    controllers: [DevController],
-    providers: [DbPopulateService],
-    exports: [DbPopulateService],
+  imports: [KeycloakModule, TypeOrmModule.forFeature([Buch])],
+  controllers: [DevController],
+  providers: [DbPopulateService],
+  exports: [DbPopulateService],
 })
 export class DevModule {}

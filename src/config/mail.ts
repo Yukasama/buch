@@ -41,25 +41,25 @@ const logger = mail?.log === true;
 // TODO records als "deeply immutable data structure" (Stage 2)
 // https://github.com/tc39/proposal-record-tuple
 export const options: Options = {
-    host,
-    port,
-    secure: false,
+  host,
+  port,
+  secure: false,
 
-    // Googlemail:
-    // service: 'gmail',
-    // auth: {
-    //     user: 'Meine.Benutzerkennung@gmail.com',
-    //     pass: 'mypassword'
-    // }
+  // Googlemail:
+  // service: 'gmail',
+  // auth: {
+  //     user: 'Meine.Benutzerkennung@gmail.com',
+  //     pass: 'mypassword'
+  // }
 
-    priority: 'normal',
-    logger,
+  priority: 'normal',
+  logger,
 } as const;
 export const mailConfig = {
-    activated,
-    options,
+  activated,
+  options,
 };
 Object.freeze(options);
 if (!loggerDefaultValue) {
-    console.debug('mailConfig = %o', mailConfig);
+  console.debug('mailConfig = %o', mailConfig);
 }

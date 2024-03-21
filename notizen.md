@@ -27,3 +27,22 @@
                                             - security
                           - postgres
 - Export default nicht verwenden, da Umbenennen zu keinem Fehler führt
+
+## Vorlesung 3 (21.03.2024)
+
+- ESLint: Statische Codeüberprüfung
+npm audit
+const -> block scoped (Gültigkeitsbereich in Block): Zeile bis geschweifte Klammer
+var -> function scoped (Gültigkeitsbereich in Function)
+Brandon Eich
+- var, da fehlertolerante Programmiersprache
+- ASI = Automatic Semicolon Insertion
+- console.log(foo()) => [object Object]
+- Jede Funktion hat Rückgabewert
+- 2015: Template String, Destructuring, Short-hand properties, const und let
+- Nicht Lambda Ausdruck, sondern Arrow function
+- this bezieht sich auf Funktion
+- async in TS, weil in C#
+- Zustände von Promises: pending, fulfilled, rejected
+- top level await (außerhalb einer Funktion)
+  - anstelledessen 2017: **IIFE immediatly invoked function expression**

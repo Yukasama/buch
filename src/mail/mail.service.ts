@@ -28,33 +28,33 @@ import { mailConfig } from '../config/mail.js';
 
 /** Typdefinition für das Senden einer Email. */
 export interface SendMailParams {
-    /** Subject für die Email. */
-    readonly subject: string;
-    /** Body für die Email. */
-    readonly body: string;
+  /** Subject für die Email. */
+  readonly subject: string;
+  /** Body für die Email. */
+  readonly body: string;
 }
 
 @Injectable()
 export class MailService {
-    readonly #logger = getLogger(MailService.name);
+  readonly #logger = getLogger(MailService.name);
 
-    async sendmail({ subject, body }: SendMailParams) {
-        if (!mailConfig.activated) {
-            this.#logger.warn('#sendmail: Mail deaktiviert');
-            return;
-        }
-
-        const from = '"Joe Doe" <Joe.Doe@acme.com>';
-        const to = '"Foo Bar" <Foo.Bar@acme.com>';
-
-        const data: SendMailOptions = { from, to, subject, html: body };
-        this.#logger.debug('#sendMail: data=%o', data);
-
-        try {
-            const nodemailer = await import('nodemailer');
-            await nodemailer.createTransport(mailConfig.options).sendMail(data);
-        } catch (err) {
-            this.#logger.warn('#sendmail: Fehler %o', err);
-        }
+  async sendmail({ subject, body }: SendMailParams) {
+    if (!mailConfig.activated) {
+      this.#logger.warn('#sendmail: Mail deaktiviert');
+      return;
     }
+
+    const from = '"Joe Doe" <Joe.Doe@acme.com>';
+    const to = '"Foo Bar" <Foo.Bar@acme.com>';
+
+    const data: SendMailOptions = { from, to, subject, html: body };
+    this.#logger.debug('#sendMail: data=%o', data);
+
+    try {
+      const nodemailer = await import('nodemailer');
+      await nodemailer.createTransport(mailConfig.options).sendMail(data);
+    } catch (err) {
+      this.#logger.warn('#sendmail: Fehler %o', err);
+    }
+  }
 }

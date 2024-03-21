@@ -48,10 +48,10 @@ services:
         aliases: [docker]
     volumes:
       - type: bind
-        source: /Users/yukasama/volumes/jenkins/certs
+        source: ~/volumes/jenkins/certs
         target: /certs/client
       - type: bind
-        source: /Users/yukasama/volumes/jenkins/jenkins_home
+        source: ~/volumes/jenkins/jenkins_home
         target: /var/jenkins_home
     privileged: true
     env_file: docker.env
@@ -78,10 +78,10 @@ services:
     volumes:
       - type: bind
         # /var/jenkins_home/workspace enthaelt das Verzeichnis "buch"
-        source: /Users/yukasama/volumes/jenkins/jenkins_home
+        source: ~/volumes/jenkins/jenkins_home
         target: /var/jenkins_home
       - type: bind
-        source: /Users/yukasama/volumes/jenkins/certs
+        source: ~/volumes/jenkins/certs
         target: /certs/client
         read_only: true
     env_file: .env

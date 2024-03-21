@@ -16,35 +16,35 @@
  */
 
 import {
-    Column,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    PrimaryGeneratedColumn,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Buch } from './buch.entity.js';
 
 @Entity()
 export class Abbildung {
-    // https://typeorm.io/entities#primary-columns
-    // CAVEAT: zuerst @Column() und erst dann @PrimaryGeneratedColumn()
-    @PrimaryGeneratedColumn()
-    id: number | undefined;
+  // https://typeorm.io/entities#primary-columns
+  // CAVEAT: zuerst @Column() und erst dann @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn()
+  id: number | undefined;
 
-    @Column()
-    readonly beschriftung!: string;
+  @Column()
+  readonly beschriftung!: string;
 
-    @Column('varchar')
-    readonly contentType: string | undefined;
+  @Column('varchar')
+  readonly contentType: string | undefined;
 
-    @ManyToOne(() => Buch, (buch) => buch.abbildungen)
-    @JoinColumn({ name: 'buch_id' })
-    buch: Buch | undefined;
+  @ManyToOne(() => Buch, (buch) => buch.abbildungen)
+  @JoinColumn({ name: 'buch_id' })
+  buch: Buch | undefined;
 
-    public toString = (): string =>
-        JSON.stringify({
-            id: this.id,
-            beschriftung: this.beschriftung,
-            contentType: this.contentType,
-        });
+  public toString = (): string =>
+    JSON.stringify({
+      id: this.id,
+      beschriftung: this.beschriftung,
+      contentType: this.contentType,
+    });
 }

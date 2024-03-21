@@ -33,23 +33,23 @@ import process from 'node:process';
  */
 @Injectable()
 export class BannerService implements OnApplicationBootstrap {
-    readonly #logger = getLogger(BannerService.name);
+  readonly #logger = getLogger(BannerService.name);
 
-    /**
-     * Die Test-DB wird im Development-Modus neu geladen.
-     */
-    onApplicationBootstrap() {
-        const { host, nodeEnv, port } = nodeConfig;
-        figlet('buch', (_, data) => console.info(data));
-        // https://nodejs.org/api/process.html
-        // "Template String" ab ES 2015
-        this.#logger.info('Node: %s', process.version);
-        this.#logger.info('NODE_ENV: %s', nodeEnv);
-        this.#logger.info('Rechnername: %s', host);
-        this.#logger.info('Port: %s', port);
-        this.#logger.info('DB-System: %s', dbType);
-        this.#logger.info('Betriebssystem: %s (%s)', type(), release());
-        this.#logger.info('Username: %s', userInfo().username);
-        this.#logger.info('Swagger UI: /swagger');
-    }
+  /**
+   * Die Test-DB wird im Development-Modus neu geladen.
+   */
+  onApplicationBootstrap() {
+    const { host, nodeEnv, port } = nodeConfig;
+    figlet('buch', (_, data) => console.info(data));
+    // https://nodejs.org/api/process.html
+    // "Template String" ab ES 2015
+    this.#logger.info('Node: %s', process.version);
+    this.#logger.info('NODE_ENV: %s', nodeEnv);
+    this.#logger.info('Rechnername: %s', host);
+    this.#logger.info('Port: %s', port);
+    this.#logger.info('DB-System: %s', dbType);
+    this.#logger.info('Betriebssystem: %s (%s)', type(), release());
+    this.#logger.info('Username: %s', userInfo().username);
+    this.#logger.info('Swagger UI: /swagger');
+  }
 }

@@ -40,14 +40,14 @@
  */
 
 import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    OneToMany,
-    OneToOne,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn,
-    VersionColumn,
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+  VersionColumn,
 } from 'typeorm';
 import { Abbildung } from './abbildung.entity.js';
 import { ApiProperty } from '@nestjs/swagger';
@@ -66,102 +66,102 @@ export type BuchArt = 'DRUCKAUSGABE' | 'KINDLE';
 // https://typeorm.io/entities
 @Entity()
 export class Buch {
-    // https://typeorm.io/entities#primary-columns
-    // default: strategy = 'increment' (SEQUENCE, GENERATED ALWAYS AS IDENTITY, AUTO_INCREMENT)
-    @PrimaryGeneratedColumn()
-    id: number | undefined;
+  // https://typeorm.io/entities#primary-columns
+  // default: strategy = 'increment' (SEQUENCE, GENERATED ALWAYS AS IDENTITY, AUTO_INCREMENT)
+  @PrimaryGeneratedColumn()
+  id: number | undefined;
 
-    @VersionColumn()
-    readonly version: number | undefined;
+  @VersionColumn()
+  readonly version: number | undefined;
 
-    @Column()
-    @ApiProperty({ example: '0-0070-0644-6', type: String })
-    readonly isbn!: string;
+  @Column()
+  @ApiProperty({ example: '0-0070-0644-6', type: String })
+  readonly isbn!: string;
 
-    @Column('int')
-    @ApiProperty({ example: 5, type: Number })
-    readonly rating: number | undefined;
+  @Column('int')
+  @ApiProperty({ example: 5, type: Number })
+  readonly rating: number | undefined;
 
-    @Column('varchar')
-    @ApiProperty({ example: 'DRUCKAUSGABE', type: String })
-    readonly art: BuchArt | undefined;
+  @Column('varchar')
+  @ApiProperty({ example: 'DRUCKAUSGABE', type: String })
+  readonly art: BuchArt | undefined;
 
-    @Column('decimal', {
-        precision: 8,
-        scale: 2,
-        transformer: new DecimalTransformer(),
-    })
-    @ApiProperty({ example: 1, type: Number })
-    // statt number ggf. Decimal aus decimal.js analog zu BigDecimal von Java
-    readonly preis!: number;
+  @Column('decimal', {
+    precision: 8,
+    scale: 2,
+    transformer: new DecimalTransformer(),
+  })
+  @ApiProperty({ example: 1, type: Number })
+  // statt number ggf. Decimal aus decimal.js analog zu BigDecimal von Java
+  readonly preis!: number;
 
-    @Column('decimal', {
-        precision: 4,
-        scale: 3,
-        transformer: new DecimalTransformer(),
-    })
-    @ApiProperty({ example: 0.1, type: Number })
-    readonly rabatt: number | undefined;
+  @Column('decimal', {
+    precision: 4,
+    scale: 3,
+    transformer: new DecimalTransformer(),
+  })
+  @ApiProperty({ example: 0.1, type: Number })
+  readonly rabatt: number | undefined;
 
-    @Column('decimal') // TypeORM unterstuetzt bei Oracle *NICHT* den Typ boolean
-    @ApiProperty({ example: true, type: Boolean })
-    readonly lieferbar: boolean | undefined;
+  @Column('decimal') // TypeORM unterstuetzt bei Oracle *NICHT* den Typ boolean
+  @ApiProperty({ example: true, type: Boolean })
+  readonly lieferbar: boolean | undefined;
 
-    @Column('date')
-    @ApiProperty({ example: '2021-01-31' })
-    // TypeORM unterstuetzt *NICHT* das Temporal-API (ES2022)
-    readonly datum: Date | string | undefined;
+  @Column('date')
+  @ApiProperty({ example: '2021-01-31' })
+  // TypeORM unterstuetzt *NICHT* das Temporal-API (ES2022)
+  readonly datum: Date | string | undefined;
 
-    @Column('date')
-    @ApiProperty({ example: 'https://test.de/', type: String })
-    readonly homepage: string | undefined;
+  @Column('date')
+  @ApiProperty({ example: 'https://test.de/', type: String })
+  readonly homepage: string | undefined;
 
-    // https://typeorm.io/entities#simple-array-column-type
-    // nicht "readonly": null ersetzen durch []
-    @Column('simple-array')
-    schlagwoerter: string[] | null | undefined;
+  // https://typeorm.io/entities#simple-array-column-type
+  // nicht "readonly": null ersetzen durch []
+  @Column('simple-array')
+  schlagwoerter: string[] | null | undefined;
 
-    // undefined wegen Updates
-    @OneToOne(() => Titel, (titel) => titel.buch, {
-        cascade: ['insert', 'remove'],
-    })
-    readonly titel: Titel | undefined;
+  // undefined wegen Updates
+  @OneToOne(() => Titel, (titel) => titel.buch, {
+    cascade: ['insert', 'remove'],
+  })
+  readonly titel: Titel | undefined;
 
-    // undefined wegen Updates
-    @OneToMany(() => Abbildung, (abbildung) => abbildung.buch, {
-        cascade: ['insert', 'remove'],
-    })
-    readonly abbildungen: Abbildung[] | undefined;
+  // undefined wegen Updates
+  @OneToMany(() => Abbildung, (abbildung) => abbildung.buch, {
+    cascade: ['insert', 'remove'],
+  })
+  readonly abbildungen: Abbildung[] | undefined;
 
-    // https://typeorm.io/entities#special-columns
-    // https://typeorm.io/entities#column-types-for-postgres
-    // https://typeorm.io/entities#column-types-for-mysql--mariadb
-    // https://typeorm.io/entities#column-types-for-oracle
-    // https://typeorm.io/entities#column-types-for-sqlite--cordova--react-native--expo
-    @CreateDateColumn({
-        type: dbType === 'sqlite' ? 'datetime' : 'timestamp',
-    })
-    readonly erzeugt: Date | undefined;
+  // https://typeorm.io/entities#special-columns
+  // https://typeorm.io/entities#column-types-for-postgres
+  // https://typeorm.io/entities#column-types-for-mysql--mariadb
+  // https://typeorm.io/entities#column-types-for-oracle
+  // https://typeorm.io/entities#column-types-for-sqlite--cordova--react-native--expo
+  @CreateDateColumn({
+    type: dbType === 'sqlite' ? 'datetime' : 'timestamp',
+  })
+  readonly erzeugt: Date | undefined;
 
-    @UpdateDateColumn({
-        type: dbType === 'sqlite' ? 'datetime' : 'timestamp',
-    })
-    readonly aktualisiert: Date | undefined;
+  @UpdateDateColumn({
+    type: dbType === 'sqlite' ? 'datetime' : 'timestamp',
+  })
+  readonly aktualisiert: Date | undefined;
 
-    public toString = (): string =>
-        JSON.stringify({
-            id: this.id,
-            version: this.version,
-            isbn: this.isbn,
-            rating: this.rating,
-            art: this.art,
-            preis: this.preis,
-            rabatt: this.rabatt,
-            lieferbar: this.lieferbar,
-            datum: this.datum,
-            homepage: this.homepage,
-            schlagwoerter: this.schlagwoerter,
-            erzeugt: this.erzeugt,
-            aktualisiert: this.aktualisiert,
-        });
+  public toString = (): string =>
+    JSON.stringify({
+      id: this.id,
+      version: this.version,
+      isbn: this.isbn,
+      rating: this.rating,
+      art: this.art,
+      preis: this.preis,
+      rabatt: this.rabatt,
+      lieferbar: this.lieferbar,
+      datum: this.datum,
+      homepage: this.homepage,
+      schlagwoerter: this.schlagwoerter,
+      erzeugt: this.erzeugt,
+      aktualisiert: this.aktualisiert,
+    });
 }

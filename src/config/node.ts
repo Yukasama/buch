@@ -43,15 +43,15 @@ const port = (config.node?.port as number | undefined) ?? 3000; // eslint-disabl
 // TODO records als "deeply immutable data structure" (Stage 2)
 // https://github.com/tc39/proposal-record-tuple
 export const nodeConfig = {
-    host: computername,
-    // Shorthand Property ab ES 2015
-    port,
-    resourcesDir: RESOURCES_DIR,
-    httpsOptions,
-    nodeEnv: NODE_ENV as
-        | 'development'
-        | 'PRODUCTION'
-        | 'production'
-        | 'test'
-        | undefined,
+  host: computername,
+  // Shorthand Property ab ES 2015
+  port,
+  resourcesDir: RESOURCES_DIR,
+  httpsOptions,
+  nodeEnv: NODE_ENV as
+    | 'development'
+    | 'PRODUCTION'
+    | 'production'
+    | 'test'
+    | undefined,
 } as const;

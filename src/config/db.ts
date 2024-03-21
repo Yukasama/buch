@@ -31,9 +31,9 @@ const type: DbType | undefined = dbConfig?.type;
 
 // 'better-sqlite3' erfordert node-gyp, wenn das Docker-Image gebaut wird
 export const dbType =
-    type === 'postgres' ||
-    type === 'mysql' ||
-    type === 'oracle' ||
-    type === 'sqlite'
-        ? type
-        : 'postgres';
+  type === 'postgres' ||
+  type === 'mysql' ||
+  type === 'oracle' ||
+  type === 'sqlite'
+    ? type
+    : 'postgres';

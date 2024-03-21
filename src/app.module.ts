@@ -15,9 +15,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import {
-    type MiddlewareConsumer,
-    Module,
-    type NestModule,
+  type MiddlewareConsumer,
+  Module,
+  type NestModule,
 } from '@nestjs/common';
 import { AdminModule } from './admin/admin.module.js';
 import { type ApolloDriverConfig } from '@nestjs/apollo';
@@ -34,25 +34,20 @@ import { graphQlModuleOptions } from './config/graphql.js';
 import { typeOrmModuleOptions } from './config/typeormOptions.js';
 
 @Module({
-    imports: [
-        AdminModule,
-        BuchModule,
-        DevModule,
-        GraphQLModule.forRoot<ApolloDriverConfig>(graphQlModuleOptions),
-        LoggerModule,
-        KeycloakModule,
-        TypeOrmModule.forRoot(typeOrmModuleOptions),
-    ],
+  imports: [
+    AdminModule,
+    BuchModule,
+    DevModule,
+    GraphQLModule.forRoot<ApolloDriverConfig>(graphQlModuleOptions),
+    LoggerModule,
+    KeycloakModule,
+    TypeOrmModule.forRoot(typeOrmModuleOptions),
+  ],
 })
 export class AppModule implements NestModule {
-    configure(consumer: MiddlewareConsumer) {
-        consumer
-            .apply(RequestLoggerMiddleware)
-            .forRoutes(
-                BuchGetController,
-                BuchWriteController,
-                'auth',
-                'graphql',
-            );
-    }
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(RequestLoggerMiddleware)
+      .forRoutes(BuchGetController, BuchWriteController, 'auth', 'graphql');
+  }
 }

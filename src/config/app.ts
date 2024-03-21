@@ -32,5 +32,5 @@ export const RESOURCES_DIR = resolve(BASEDIR, 'config', 'resources');
 
 const configFile = resolve(RESOURCES_DIR, 'app.yml');
 export const config = load(
-    readFileSync(configFile, 'utf8'), // eslint-disable-line security/detect-non-literal-fs-filename
+  readFileSync(configFile, 'utf8'), // eslint-disable-line security/detect-non-literal-fs-filename
 ) as Record<string, any>;

@@ -21,7 +21,7 @@ services:
     command: [image, juergenzimmermann/buch:2024.04.0-bookworm]
     volumes:
       - type: bind
-        source: /Users/yukasama/volumes/trivy
+        source: ~/volumes/trivy
         target: /root/.cache
       - type: bind
         source: /var/run/docker.sock

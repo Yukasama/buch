@@ -18,11 +18,11 @@
 import { afterAll, beforeAll, describe, test } from '@jest/globals';
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios';
 import {
-    host,
-    httpsAgent,
-    port,
-    shutdownServer,
-    startServer,
+  host,
+  httpsAgent,
+  port,
+  shutdownServer,
+  startServer,
 } from '../testserver.js';
 import { type BuchDtoOhneRef } from '../../src/buch/rest/buchDTO.entity.js';
 import { type ErrorResponse } from './error-response.js';
@@ -33,53 +33,53 @@ import { loginRest } from '../login.js';
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
 const geaendertesBuch: BuchDtoOhneRef = {
-    isbn: '978-0-201-63361-0',
-    rating: 5,
-    art: 'KINDLE',
-    preis: 3333,
-    rabatt: 0.33,
-    lieferbar: true,
-    datum: '2022-03-03',
-    homepage: 'https://geaendert.put.rest',
-    schlagwoerter: ['JAVASCRIPT'],
+  isbn: '978-0-201-63361-0',
+  rating: 5,
+  art: 'KINDLE',
+  preis: 3333,
+  rabatt: 0.33,
+  lieferbar: true,
+  datum: '2022-03-03',
+  homepage: 'https://geaendert.put.rest',
+  schlagwoerter: ['JAVASCRIPT'],
 };
 const idVorhanden = '30';
 
 const geaendertesBuchIdNichtVorhanden: BuchDtoOhneRef = {
-    isbn: '978-0-007-09732-6',
-    rating: 4,
-    art: 'DRUCKAUSGABE',
-    preis: 44.4,
-    rabatt: 0.044,
-    lieferbar: true,
-    datum: '2022-02-04',
-    homepage: 'https://acme.de',
-    schlagwoerter: ['JAVASCRIPT'],
+  isbn: '978-0-007-09732-6',
+  rating: 4,
+  art: 'DRUCKAUSGABE',
+  preis: 44.4,
+  rabatt: 0.044,
+  lieferbar: true,
+  datum: '2022-02-04',
+  homepage: 'https://acme.de',
+  schlagwoerter: ['JAVASCRIPT'],
 };
 const idNichtVorhanden = '999999';
 
 const geaendertesBuchInvalid: Record<string, unknown> = {
-    isbn: 'falsche-ISBN',
-    rating: -1,
-    art: 'UNSICHTBAR',
-    preis: -1,
-    rabatt: 2,
-    lieferbar: true,
-    datum: '12345-123-123',
-    titel: '?!',
-    homepage: 'anyHomepage',
+  isbn: 'falsche-ISBN',
+  rating: -1,
+  art: 'UNSICHTBAR',
+  preis: -1,
+  rabatt: 2,
+  lieferbar: true,
+  datum: '12345-123-123',
+  titel: '?!',
+  homepage: 'anyHomepage',
 };
 
 const veraltesBuch: BuchDtoOhneRef = {
-    isbn: '978-0-007-09732-6',
-    rating: 1,
-    art: 'DRUCKAUSGABE',
-    preis: 44.4,
-    rabatt: 0.044,
-    lieferbar: true,
-    datum: '2022-02-04',
-    homepage: 'https://acme.de',
-    schlagwoerter: ['JAVASCRIPT'],
+  isbn: '978-0-007-09732-6',
+  rating: 1,
+  art: 'DRUCKAUSGABE',
+  preis: 44.4,
+  rabatt: 0.044,
+  lieferbar: true,
+  datum: '2022-02-04',
+  homepage: 'https://acme.de',
+  schlagwoerter: ['JAVASCRIPT'],
 };
 
 // -----------------------------------------------------------------------------
@@ -88,168 +88,168 @@ const veraltesBuch: BuchDtoOhneRef = {
 // Test-Suite
 // eslint-disable-next-line max-lines-per-function
 describe('PUT /rest/:id', () => {
-    let client: AxiosInstance;
-    const headers: Record<string, string> = {
-        'Content-Type': 'application/json', // eslint-disable-line @typescript-eslint/naming-convention
-    };
+  let client: AxiosInstance;
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json', // eslint-disable-line @typescript-eslint/naming-convention
+  };
 
-    // Testserver starten und dabei mit der DB verbinden
-    beforeAll(async () => {
-        await startServer();
-        const baseURL = `https://${host}:${port}`;
-        client = axios.create({
-            baseURL,
-            headers,
-            httpsAgent,
-            validateStatus: (status) => status < 500, // eslint-disable-line @typescript-eslint/no-magic-numbers
-        });
+  // Testserver starten und dabei mit der DB verbinden
+  beforeAll(async () => {
+    await startServer();
+    const baseURL = `https://${host}:${port}`;
+    client = axios.create({
+      baseURL,
+      headers,
+      httpsAgent,
+      validateStatus: (status) => status < 500, // eslint-disable-line @typescript-eslint/no-magic-numbers
     });
+  });
 
-    afterAll(async () => {
-        await shutdownServer();
-    });
+  afterAll(async () => {
+    await shutdownServer();
+  });
 
-    test('Vorhandenes Buch aendern', async () => {
-        // given
-        const url = `/rest/${idVorhanden}`;
-        const token = await loginRest(client);
-        headers.Authorization = `Bearer ${token}`;
-        headers['If-Match'] = '"0"';
+  test('Vorhandenes Buch aendern', async () => {
+    // given
+    const url = `/rest/${idVorhanden}`;
+    const token = await loginRest(client);
+    headers.Authorization = `Bearer ${token}`;
+    headers['If-Match'] = '"0"';
 
-        // when
-        const { status, data }: AxiosResponse<string> = await client.put(
-            url,
-            geaendertesBuch,
-            { headers },
-        );
+    // when
+    const { status, data }: AxiosResponse<string> = await client.put(
+      url,
+      geaendertesBuch,
+      { headers },
+    );
 
-        // then
-        expect(status).toBe(HttpStatus.NO_CONTENT);
-        expect(data).toBe('');
-    });
+    // then
+    expect(status).toBe(HttpStatus.NO_CONTENT);
+    expect(data).toBe('');
+  });
 
-    test('Nicht-vorhandenes Buch aendern', async () => {
-        // given
-        const url = `/rest/${idNichtVorhanden}`;
-        const token = await loginRest(client);
-        headers.Authorization = `Bearer ${token}`;
-        headers['If-Match'] = '"0"';
+  test('Nicht-vorhandenes Buch aendern', async () => {
+    // given
+    const url = `/rest/${idNichtVorhanden}`;
+    const token = await loginRest(client);
+    headers.Authorization = `Bearer ${token}`;
+    headers['If-Match'] = '"0"';
 
-        // when
-        const { status }: AxiosResponse<string> = await client.put(
-            url,
-            geaendertesBuchIdNichtVorhanden,
-            { headers },
-        );
+    // when
+    const { status }: AxiosResponse<string> = await client.put(
+      url,
+      geaendertesBuchIdNichtVorhanden,
+      { headers },
+    );
 
-        // then
-        expect(status).toBe(HttpStatus.NOT_FOUND);
-    });
+    // then
+    expect(status).toBe(HttpStatus.NOT_FOUND);
+  });
 
-    test('Vorhandenes Buch aendern, aber mit ungueltigen Daten', async () => {
-        // given
-        const url = `/rest/${idVorhanden}`;
-        const token = await loginRest(client);
-        headers.Authorization = `Bearer ${token}`;
-        headers['If-Match'] = '"0"';
-        const expectedMsg = [
-            expect.stringMatching(/^isbn /u),
-            expect.stringMatching(/^rating /u),
-            expect.stringMatching(/^art /u),
-            expect.stringMatching(/^preis /u),
-            expect.stringMatching(/^rabatt /u),
-            expect.stringMatching(/^datum /u),
-            expect.stringMatching(/^homepage /u),
-        ];
+  test('Vorhandenes Buch aendern, aber mit ungueltigen Daten', async () => {
+    // given
+    const url = `/rest/${idVorhanden}`;
+    const token = await loginRest(client);
+    headers.Authorization = `Bearer ${token}`;
+    headers['If-Match'] = '"0"';
+    const expectedMsg = [
+      expect.stringMatching(/^isbn /u),
+      expect.stringMatching(/^rating /u),
+      expect.stringMatching(/^art /u),
+      expect.stringMatching(/^preis /u),
+      expect.stringMatching(/^rabatt /u),
+      expect.stringMatching(/^datum /u),
+      expect.stringMatching(/^homepage /u),
+    ];
 
-        // when
-        const { status, data }: AxiosResponse<Record<string, any>> =
-            await client.put(url, geaendertesBuchInvalid, { headers });
+    // when
+    const { status, data }: AxiosResponse<Record<string, any>> =
+      await client.put(url, geaendertesBuchInvalid, { headers });
 
-        // then
-        expect(status).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
+    // then
+    expect(status).toBe(HttpStatus.UNPROCESSABLE_ENTITY);
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const messages: string[] = data.message;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const messages: string[] = data.message;
 
-        expect(messages).toBeDefined();
-        expect(messages).toHaveLength(expectedMsg.length);
-        expect(messages).toEqual(expect.arrayContaining(expectedMsg));
-    });
+    expect(messages).toBeDefined();
+    expect(messages).toHaveLength(expectedMsg.length);
+    expect(messages).toEqual(expect.arrayContaining(expectedMsg));
+  });
 
-    test('Vorhandenes Buch aendern, aber ohne Versionsnummer', async () => {
-        // given
-        const url = `/rest/${idVorhanden}`;
-        const token = await loginRest(client);
-        headers.Authorization = `Bearer ${token}`;
-        delete headers['If-Match'];
+  test('Vorhandenes Buch aendern, aber ohne Versionsnummer', async () => {
+    // given
+    const url = `/rest/${idVorhanden}`;
+    const token = await loginRest(client);
+    headers.Authorization = `Bearer ${token}`;
+    delete headers['If-Match'];
 
-        // when
-        const { status, data }: AxiosResponse<string> = await client.put(
-            url,
-            geaendertesBuch,
-            { headers },
-        );
+    // when
+    const { status, data }: AxiosResponse<string> = await client.put(
+      url,
+      geaendertesBuch,
+      { headers },
+    );
 
-        // then
-        expect(status).toBe(HttpStatus.PRECONDITION_REQUIRED);
-        expect(data).toBe('Header "If-Match" fehlt');
-    });
+    // then
+    expect(status).toBe(HttpStatus.PRECONDITION_REQUIRED);
+    expect(data).toBe('Header "If-Match" fehlt');
+  });
 
-    test('Vorhandenes Buch aendern, aber mit alter Versionsnummer', async () => {
-        // given
-        const url = `/rest/${idVorhanden}`;
-        const token = await loginRest(client);
-        headers.Authorization = `Bearer ${token}`;
-        headers['If-Match'] = '"-1"';
+  test('Vorhandenes Buch aendern, aber mit alter Versionsnummer', async () => {
+    // given
+    const url = `/rest/${idVorhanden}`;
+    const token = await loginRest(client);
+    headers.Authorization = `Bearer ${token}`;
+    headers['If-Match'] = '"-1"';
 
-        // when
-        const { status, data }: AxiosResponse<ErrorResponse> = await client.put(
-            url,
-            veraltesBuch,
-            { headers },
-        );
+    // when
+    const { status, data }: AxiosResponse<ErrorResponse> = await client.put(
+      url,
+      veraltesBuch,
+      { headers },
+    );
 
-        // then
-        expect(status).toBe(HttpStatus.PRECONDITION_FAILED);
+    // then
+    expect(status).toBe(HttpStatus.PRECONDITION_FAILED);
 
-        const { message, statusCode } = data;
+    const { message, statusCode } = data;
 
-        expect(message).toMatch(/Versionsnummer/u);
-        expect(statusCode).toBe(HttpStatus.PRECONDITION_FAILED);
-    });
+    expect(message).toMatch(/Versionsnummer/u);
+    expect(statusCode).toBe(HttpStatus.PRECONDITION_FAILED);
+  });
 
-    test('Vorhandenes Buch aendern, aber ohne Token', async () => {
-        // given
-        const url = `/rest/${idVorhanden}`;
-        delete headers.Authorization;
-        headers['If-Match'] = '"0"';
+  test('Vorhandenes Buch aendern, aber ohne Token', async () => {
+    // given
+    const url = `/rest/${idVorhanden}`;
+    delete headers.Authorization;
+    headers['If-Match'] = '"0"';
 
-        // when
-        const response: AxiosResponse<Record<string, any>> = await client.put(
-            url,
-            geaendertesBuch,
-            { headers },
-        );
+    // when
+    const response: AxiosResponse<Record<string, any>> = await client.put(
+      url,
+      geaendertesBuch,
+      { headers },
+    );
 
-        // then
-        expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
-    });
+    // then
+    expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
+  });
 
-    test('Vorhandenes Buch aendern, aber mit falschem Token', async () => {
-        // given
-        const url = `/rest/${idVorhanden}`;
-        const token = 'FALSCH';
-        headers.Authorization = `Bearer ${token}`;
+  test('Vorhandenes Buch aendern, aber mit falschem Token', async () => {
+    // given
+    const url = `/rest/${idVorhanden}`;
+    const token = 'FALSCH';
+    headers.Authorization = `Bearer ${token}`;
 
-        // when
-        const response: AxiosResponse<Record<string, any>> = await client.put(
-            url,
-            geaendertesBuch,
-            { headers },
-        );
+    // when
+    const response: AxiosResponse<Record<string, any>> = await client.put(
+      url,
+      geaendertesBuch,
+      { headers },
+    );
 
-        // then
-        expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
-    });
+    // then
+    expect(response.status).toBe(HttpStatus.UNAUTHORIZED);
+  });
 });

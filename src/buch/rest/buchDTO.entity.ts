@@ -22,19 +22,19 @@
  */
 
 import {
-    ArrayUnique,
-    IsArray,
-    IsBoolean,
-    IsISBN,
-    IsISO8601,
-    IsInt,
-    IsOptional,
-    IsPositive,
-    IsUrl,
-    Matches,
-    Max,
-    Min,
-    ValidateNested,
+  ArrayUnique,
+  IsArray,
+  IsBoolean,
+  IsISBN,
+  IsISO8601,
+  IsInt,
+  IsOptional,
+  IsPositive,
+  IsUrl,
+  Matches,
+  Max,
+  Min,
+  ValidateNested,
 } from 'class-validator';
 import { AbbildungDTO } from './abbildungDTO.entity.js';
 import { ApiProperty } from '@nestjs/swagger';
@@ -48,69 +48,69 @@ export const MAX_RATING = 5;
  * Entity-Klasse für Bücher ohne TypeORM und ohne Referenzen.
  */
 export class BuchDtoOhneRef {
-    // https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s13.html
-    @IsISBN(13)
-    @ApiProperty({ example: '978-0-007-00644-1', type: String })
-    readonly isbn!: string;
+  // https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s13.html
+  @IsISBN(13)
+  @ApiProperty({ example: '978-0-007-00644-1', type: String })
+  readonly isbn!: string;
 
-    @IsInt()
-    @Min(0)
-    @Max(MAX_RATING)
-    @ApiProperty({ example: 5, type: Number })
-    readonly rating: number | undefined;
+  @IsInt()
+  @Min(0)
+  @Max(MAX_RATING)
+  @ApiProperty({ example: 5, type: Number })
+  readonly rating: number | undefined;
 
-    @Matches(/^DRUCKAUSGABE$|^KINDLE$/u)
-    @IsOptional()
-    @ApiProperty({ example: 'DRUCKAUSGABE', type: String })
-    readonly art: BuchArt | undefined;
+  @Matches(/^DRUCKAUSGABE$|^KINDLE$/u)
+  @IsOptional()
+  @ApiProperty({ example: 'DRUCKAUSGABE', type: String })
+  readonly art: BuchArt | undefined;
 
-    @IsPositive()
-    @ApiProperty({ example: 1, type: Number })
-    // statt number ggf. Decimal aus decimal.js analog zu BigDecimal von Java
-    readonly preis!: number;
+  @IsPositive()
+  @ApiProperty({ example: 1, type: Number })
+  // statt number ggf. Decimal aus decimal.js analog zu BigDecimal von Java
+  readonly preis!: number;
 
-    @Min(0)
-    @Max(1)
-    @IsOptional()
-    @ApiProperty({ example: 0.1, type: Number })
-    readonly rabatt: number | undefined;
+  @Min(0)
+  @Max(1)
+  @IsOptional()
+  @ApiProperty({ example: 0.1, type: Number })
+  readonly rabatt: number | undefined;
 
-    @IsBoolean()
-    @ApiProperty({ example: true, type: Boolean })
-    readonly lieferbar: boolean | undefined;
+  @IsBoolean()
+  @ApiProperty({ example: true, type: Boolean })
+  readonly lieferbar: boolean | undefined;
 
-    @IsISO8601({ strict: true })
-    @IsOptional()
-    @ApiProperty({ example: '2021-01-31' })
-    readonly datum: Date | string | undefined;
+  @IsISO8601({ strict: true })
+  @IsOptional()
+  @ApiProperty({ example: '2021-01-31' })
+  readonly datum: Date | string | undefined;
 
-    @IsUrl()
-    @IsOptional()
-    @ApiProperty({ example: 'https://test.de/', type: String })
-    readonly homepage: string | undefined;
+  @IsUrl()
+  @IsOptional()
+  @ApiProperty({ example: 'https://test.de/', type: String })
+  readonly homepage: string | undefined;
 
-    @IsOptional()
-    @ArrayUnique()
-    @ApiProperty({ example: ['JAVASCRIPT', 'TYPESCRIPT'] })
-    readonly schlagwoerter: string[] | undefined;
+  @IsOptional()
+  @ArrayUnique()
+  @ApiProperty({ example: ['JAVASCRIPT', 'TYPESCRIPT'] })
+  readonly schlagwoerter: string[] | undefined;
 }
 
 /**
  * Entity-Klasse für Bücher ohne TypeORM.
  */
 export class BuchDTO extends BuchDtoOhneRef {
-    @ValidateNested()
-    @Type(() => TitelDTO)
-    @ApiProperty({ type: TitelDTO })
-    readonly titel!: TitelDTO; // NOSONAR
+  @ValidateNested()
+  @Type(() => TitelDTO)
+  @ApiProperty({ type: TitelDTO })
+  readonly titel!: TitelDTO; // NOSONAR
 
-    @IsOptional()
-    @IsArray()
-    @ValidateNested({ each: true })
-    @Type(() => AbbildungDTO)
-    @ApiProperty({ type: [AbbildungDTO] })
-    readonly abbildungen: AbbildungDTO[] | undefined;
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => AbbildungDTO)
+  @ApiProperty({ type: [AbbildungDTO] })
+  readonly abbildungen: AbbildungDTO[] | undefined;
 
-    // AbbildungDTO
+  // AbbildungDTO
 }
 /* eslint-enable max-classes-per-file, @typescript-eslint/no-magic-numbers */

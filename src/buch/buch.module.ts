@@ -38,17 +38,17 @@ import { entities } from './entity/entities.js';
  * Funktionalität für TypeORM.
  */
 @Module({
-    imports: [KeycloakModule, MailModule, TypeOrmModule.forFeature(entities)],
-    controllers: [BuchGetController, BuchWriteController],
-    // Provider sind z.B. Service-Klassen fuer DI
-    providers: [
-        BuchReadService,
-        BuchWriteService,
-        BuchQueryResolver,
-        BuchMutationResolver,
-        QueryBuilder,
-    ],
-    // Export der Provider fuer DI in anderen Modulen
-    exports: [BuchReadService, BuchWriteService],
+  imports: [KeycloakModule, MailModule, TypeOrmModule.forFeature(entities)],
+  controllers: [BuchGetController, BuchWriteController],
+  // Provider sind z.B. Service-Klassen fuer DI
+  providers: [
+    BuchReadService,
+    BuchWriteService,
+    BuchQueryResolver,
+    BuchMutationResolver,
+    QueryBuilder,
+  ],
+  // Export der Provider fuer DI in anderen Modulen
+  exports: [BuchReadService, BuchWriteService],
 })
 export class BuchModule {}

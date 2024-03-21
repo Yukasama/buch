@@ -28,13 +28,13 @@ services:
         target: 9092
     volumes:
       - type: bind
-        source: /Users/yukasama/volumes/sonarqube/data
+        source: ~/volumes/sonarqube/data
         target: /opt/sonarqube/data
       - type: bind
-        source: /Users/yukasama/volumes/sonarqube/logs
+        source: ~/volumes/sonarqube/logs
         target: /opt/sonarqube/logs
       - type: bind
-        source: /Users/yukasama/volumes/sonarqube/extensions
+        source: ~/volumes/sonarqube/extensions
         target: /opt/sonarqube/lib/extensions
         read_only: true
     env_file: .env

@@ -26,7 +26,7 @@ import { Module } from '@nestjs/common';
  * Die dekorierte Modul-Klasse mit den Service-Klassen.
  */
 @Module({
-    providers: [MailService],
-    exports: [MailService],
+  providers: [MailService],
+  exports: [MailService],
 })
 export class MailModule {}

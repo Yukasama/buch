@@ -33,13 +33,13 @@ import type pino from 'pino';
  * @param kind i.a. `class`
  */
 export const getLogger: (
-    context: string,
-    kind?: string,
+  context: string,
+  kind?: string,
 ) => pino.Logger<string> = (context: string, kind = 'class') => {
-    const bindings: Record<string, string> = {};
-    // "indexed access" auf eine Property, deren Name als Wert im Argument "kind" uebergeben wird
-    // eslint-disable-next-line security/detect-object-injection
-    bindings[kind] = context;
-    // https://getpino.io/#/docs/child-loggers
-    return parentLogger.child(bindings);
+  const bindings: Record<string, string> = {};
+  // "indexed access" auf eine Property, deren Name als Wert im Argument "kind" uebergeben wird
+  // eslint-disable-next-line security/detect-object-injection
+  bindings[kind] = context;
+  // https://getpino.io/#/docs/child-loggers
+  return parentLogger.child(bindings);
 };

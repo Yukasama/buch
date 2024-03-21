@@ -21,7 +21,7 @@ import { PrometheusController } from './prometheus.controller.js';
 import { TerminusModule } from '@nestjs/terminus';
 
 @Module({
-    imports: [TerminusModule, HttpModule],
-    controllers: [HealthController, PrometheusController],
+  imports: [TerminusModule, HttpModule],
+  controllers: [HealthController, PrometheusController],
 })
 export class AdminModule {}

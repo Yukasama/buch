@@ -37,15 +37,15 @@ const { NODE_ENV, CLIENT_SECRET, LOG_DEFAULT, START_DB_SERVER } = process.env; /
  * Umgebungsvariable zur Konfiguration
  */
 export const env = {
-    // Umgebungsvariable `NODE_ENV` als gleichnamige Konstante, die i.a. einen der
-    // folgenden Werte enthält:
-    // - `production`, z.B. in einer Cloud,
-    // - `development` oder
-    // - `test`
-    NODE_ENV,
-    CLIENT_SECRET,
-    LOG_DEFAULT,
-    START_DB_SERVER,
+  // Umgebungsvariable `NODE_ENV` als gleichnamige Konstante, die i.a. einen der
+  // folgenden Werte enthält:
+  // - `production`, z.B. in einer Cloud,
+  // - `development` oder
+  // - `test`
+  NODE_ENV,
+  CLIENT_SECRET,
+  LOG_DEFAULT,
+  START_DB_SERVER,
 } as const;
 /* eslint-enable @typescript-eslint/naming-convention */
 
