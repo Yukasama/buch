@@ -5,4 +5,7 @@
     "*.csv": "csv (semicolon)"
   },
   "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": false,
+  "files.autoSave": "afterDelay",
 }

@@ -55,9 +55,12 @@ apt-get upgrade --yes
 apt-get install --no-install-recommends --yes python3.11=3.11.2-6 python3.11-dev=3.11.2-6 build-essential=12.9
 ln -s /usr/bin/python3.11 /usr/bin/python3
 ln -s /usr/bin/python3.11 /usr/bin/python
-
-npm i -g --no-audit --no-fund npm
+npm i -g pnpm
 EOF
+
+ENV PATH="/usr/local/share/.config/yarn/global/node_modules/.bin:${PATH}"
+
+RUN pnpm i npm
 
 USER node
 
@@ -67,15 +70,15 @@ COPY src ./src
 
 # https://docs.docker.com/engine/reference/builder/#run---mounttypebind
 RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=package-lock.json,target=package-lock.json \
+    --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
     --mount=type=bind,source=nest-cli.json,target=nest-cli.json \
     --mount=type=bind,source=tsconfig.json,target=tsconfig.json \
     --mount=type=bind,source=tsconfig.build.json,target=tsconfig.build.json \
-    --mount=type=cache,target=/root/.npm <<EOF
+    --mount=type=cache,target=/root/.pnpm-store <<EOF
 set -eux
-# ci (= clean install) mit package-lock.json
-npm ci --no-audit --no-fund
-npm run build
+# ci (= clean install) mit pnpm-lock.yaml
+pnpm i
+pnpm run build
 EOF
 
 # ------------------------------------------------------------------------------
@@ -90,20 +93,24 @@ apt-get upgrade --yes
 apt-get install --no-install-recommends --yes python3.11-minimal=3.11.2-6 python3.11-dev=3.11.2-6 build-essential=12.9
 ln -s /usr/bin/python3.11 /usr/bin/python3
 ln -s /usr/bin/python3.11 /usr/bin/python
-npm i -g --no-audit --no-fund npm
+npm i -g pnpm
 EOF
+
+ENV PATH="/usr/local/share/.config/yarn/global/node_modules/.bin:${PATH}"
+
+RUN pnpm i npm
 
 USER node
 
 WORKDIR /home/node
 
 RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=package-lock.json,target=package-lock.json \
-    --mount=type=cache,target=/root/.npm <<EOF
+    --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
+    --mount=type=cache,target=/root/.pnpm <<EOF
 set -eux
-# ci (= clean install) mit package-lock.json
+# ci (= clean install) mit pnpm-lock.yaml
 # --omit=dev: ohne devDependencies
-npm ci --no-audit --no-fund --omit=dev --omit=peer
+pnpm install --frozen-lockfile --prod
 EOF
 
 # ------------------------------------------------------------------------------
