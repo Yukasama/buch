@@ -13,9 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-Set-StrictMode -Version Latest
-
-$port = "3000"
+port='3000'
 #$hostname = $env:HOSTNAME
-$hostname = "localhost"
-C:\Zimmermann\Git\mingw64\bin\openssl s_client -connect ${hostname}:$port
+hostname='localhost'
+openssl s_client -connect ${hostname}:$port

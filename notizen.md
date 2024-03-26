@@ -46,3 +46,34 @@ Brandon Eich
 - Zustände von Promises: pending, fulfilled, rejected
 - top level await (außerhalb einer Funktion)
   - anstelledessen 2017: **IIFE immediatly invoked function expression**
+
+## Vorlesung 4 (26.03.2024)
+
+- --watch: Server neustarten bei Änderung
+- pino: Loggt asynchron: Logausgaben werden nicht direkt ausgegeben,
+  aber bei Serverabsturz geht Fehler eventuell verloren
+  - winston: Langsam, loggt synchron, weiterverbreitet
+- zertifikat
+  - Hostname: host.docker.internal oder localhost
+- compression: Dekomprimieren: POST, PUT; Komprimieren: GET
+  - GZip = GNUZip = opensource
+
+### cors
+
+- Cross origin, Webserver und Appserver
+- 1. Clients: Browser, iOS, Android (! Browser muss Request an anderen Server blocken)
+- 2. Webserver: Apache httpd, nginx
+- 3. Applikationsserver, Microservice
+- 4. DB
+  - Alternative: Proxy-Pattern (aber kein Proxyserver, ein Reverse-Proxy),
+    Webserver leitet Request weiter an Appserver (SSR)
+  - Proxyserver: Puffert Antworten (von Intranet ins Internet)
+
+### Module
+
+- Modul im Sinne von JS: Datei (was nach from kommt), nicht das Gleiche wie bei Nest
+- Decorator, nicht mehr Annotation
+- Klassenimplementierung: (Properties alle public), daher seit 2019:
+  private class mit #
+- Nur ein constructor, da im alten JS keine Typen, genau wie keine mehreren
+  .catch()-Klauseln

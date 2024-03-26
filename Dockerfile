@@ -106,7 +106,7 @@ WORKDIR /home/node
 
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
-    --mount=type=cache,target=/root/.pnpm <<EOF
+    --mount=type=cache,target=/root/.pnpm-store <<EOF
 set -eux
 # ci (= clean install) mit pnpm-lock.yaml
 # --omit=dev: ohne devDependencies
