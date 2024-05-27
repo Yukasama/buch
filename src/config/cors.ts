@@ -18,7 +18,12 @@ import { type CorsOptions } from '@nestjs/common/interfaces/external/cors-option
 
 export const corsOptions: CorsOptions = {
   // Access-Control-Allow-Origin (nur Requests von origin zulassen)
-  origin: ['https://studio.apollographql.com', 'http://localhost:4200'],
+  origin: [
+    'https://studio.apollographql.com',
+    'http://localhost:4200',
+    'http://localhost:5173',
+    'https://buch-web.zenathra.com',
+  ],
   // origin: true,
 
   // Access-Control-Allow-Methods (hier: default)
