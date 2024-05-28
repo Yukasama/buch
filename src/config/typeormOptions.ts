@@ -68,7 +68,7 @@ switch (dbType) {
     dataSourceOptions = {
       type: 'postgres',
       host,
-      port: 14_652,
+      port: 5432,
       username,
       password: pass,
       database,
@@ -168,7 +168,7 @@ if (dbType === 'postgres') {
   adminDataSourceOptionsTemp = {
     type: 'postgres',
     host,
-    port: 14_652,
+    port: 5432,
     username: 'postgres',
     password: passAdmin,
     database,

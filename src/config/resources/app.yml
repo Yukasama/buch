@@ -32,7 +32,7 @@ db:
   #type: oracle
   #type: sqlite
 
-  host: 5.tcp.eu.ngrok.io
+  # host: localhost
 
   #username: buch
   #password: p
