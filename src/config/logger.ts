@@ -91,7 +91,7 @@ const options: pino.TransportMultiOptions | pino.TransportSingleOptions = pretty
       targets: [fileOptions, prettyTransportOptions],
     }
   : {
-      targets: [fileOptions],
+      targets: [],
     };
 // in pino: type ThreadStream = any
 // type-coverage:ignore-next-line
