@@ -7,10 +7,6 @@
   "license": "GPL-3.0",
   "exports": "./dist/src/main.js",
   "type": "module",
-  "engines": {
-    "node": ">=20.11.1",
-    "npm": ">=10.3.0"
-  },
   "scripts": {
     "prebuild": "npm run clean",
     "build": "nest build",

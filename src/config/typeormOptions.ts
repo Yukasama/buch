@@ -28,6 +28,7 @@ import { Buch } from '../buch/entity/buch.entity.js';
 import { type DataSourceOptions } from 'typeorm';
 import { dbType } from './db.js';
 import { entities } from '../buch/entity/entities.js';
+import { env } from './env.js';
 import { loggerDefaultValue } from './logger.js';
 import { nodeConfig } from './node.js';
 import { readFileSync } from 'node:fs';
@@ -64,26 +65,13 @@ console.debug('dbResourcesDir = %s', dbResourcesDir);
 let dataSourceOptions: DataSourceOptions;
 switch (dbType) {
   case 'postgres': {
-    const cert = readFileSync(resolve(dbResourcesDir, 'certificate.cer')); // eslint-disable-line security/detect-non-literal-fs-filename, sonarjs/no-duplicate-string
     dataSourceOptions = {
       type: 'postgres',
-      host,
-      port: 5432,
-      username,
-      password: pass,
-      database,
-      schema: username,
-      poolSize: 10,
+      url: env.DATABASE_URL,
       entities,
       namingStrategy,
       logging,
       logger,
-      ssl: { cert },
-      extra: {
-        ssl: {
-          rejectUnauthorized: false,
-        },
-      },
     };
     break;
   }
@@ -162,26 +150,15 @@ if (!loggerDefaultValue) {
 }
 
 export const dbPopulate = db?.populate === true;
+export const dbSeed = db?.seed === true;
 let adminDataSourceOptionsTemp: DataSourceOptions | undefined;
 if (dbType === 'postgres') {
-  const cert = readFileSync(resolve(dbResourcesDir, 'certificate.cer')); // eslint-disable-line security/detect-non-literal-fs-filename
   adminDataSourceOptionsTemp = {
     type: 'postgres',
-    host,
-    port: 5432,
-    username: 'postgres',
-    password: passAdmin,
-    database,
-    schema: database,
+    url: env.DATABASE_URL,
     namingStrategy,
     logging,
     logger,
-    ssl: { cert },
-    extra: {
-      ssl: {
-        rejectUnauthorized: false,
-      },
-    },
   };
 } else if (dbType === 'mysql') {
   const cert = readFileSync(resolve(dbResourcesDir, 'certificate.cer')); // eslint-disable-line security/detect-non-literal-fs-filename

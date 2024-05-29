@@ -26,6 +26,7 @@ import {
   adminDataSourceOptions,
   dbPopulate,
   dbResourcesDir,
+  dbSeed,
   typeOrmModuleOptions,
 } from '../typeormOptions.js';
 import { DataSource } from 'typeorm';
@@ -181,9 +182,11 @@ export class DbPopulateService implements OnApplicationBootstrap {
     const createStatements = readFileSync(createScript, 'utf8'); // eslint-disable-line security/detect-non-literal-fs-filename,n/no-sync
     await this.#datasource.query(createStatements);
 
-    // COPY zum Laden von CSV-Dateien erfordert Administrationsrechte
-    // https://www.postgresql.org/docs/current/sql-copy.html
+    if (!dbSeed) {
+      return;
+    }
 
+    // COPY zum Laden von CSV-Dateien erfordert Administrationsrechte
     // https://typeorm.io/data-source
     const dataSource = new DataSource(adminDataSourceOptions!);
     await dataSource.initialize();

@@ -39,6 +39,7 @@ db:
   #passwordAdmin: p
   #name: buch
   populate: true
+  # seed: true
 
 # ==============================================================================
 # K e y c l o a k
