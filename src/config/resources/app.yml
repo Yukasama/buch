@@ -38,7 +38,7 @@ db:
   #password: p
   #passwordAdmin: p
   #name: buch
-  populate: true
+  # populate: true
   # seed: true
 
 # ==============================================================================
