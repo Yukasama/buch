@@ -5,9 +5,9 @@ if [[ -n $base && $base != 'distroless' && $base != 'wolfi' && $base != 'bookwor
 fi
 
 diveVersion='v0.12.0'
-imagePrefix='juergenzimmermann/'
+imagePrefix='g3/'
 imageBase='buch'
-imageTag="2024.04.0-$base"
+imageTag="2024.06.0"
 image="$imagePrefix${imageBase}:$imageTag"
 
 # $image = 'gcr.io/distroless/nodejs20-debian12:nonroot'

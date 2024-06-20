@@ -102,10 +102,14 @@ export class LoginController {
   async login(@Body() { username, password }: Login, @Res() res: Response) {
     this.#logger.debug('login: username=%s', username);
 
+    this.#logger.debug('login: username=%s', username);
+    this.#logger.debug('login: password=%s', password);
+
     const result = await this.#keycloakService.login({
       username,
       password,
     });
+    this.#logger.info('login: result=%o', result);
     if (result === undefined) {
       return res.sendStatus(HttpStatus.UNAUTHORIZED);
     }
