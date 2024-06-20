@@ -45,7 +45,7 @@ db:
 # K e y c l o a k
 # ==============================================================================
 keycloak:
-  #authServerUrl: http://localhost:8080
+  authServerUrl: https://localhost:8443
   #realm: acme
   # siehe Keycloak Menuepunkt "Clients" > Tab "Clients list" > Spalte "Client ID"
   #clientId: buch-client

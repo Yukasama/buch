@@ -1,6 +1,6 @@
 services:
   buch:
-    image: juergenzimmermann/buch:2024.04.0-bookworm
+    image: g3/buch:2024.06.0
     ports:
       - published: 3000
         target: 3000
