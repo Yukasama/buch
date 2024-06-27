@@ -146,6 +146,7 @@ WORKDIR /opt/app
 USER node
 
 COPY --chown=node:node package.json .env ./
+COPY --chown=node:node .env ./
 COPY --from=dependencies --chown=node:node /home/node/node_modules ./node_modules
 COPY --from=dist --chown=node:node /home/node/dist ./dist
 COPY --chown=node:node src/config/resources ./dist/config/resources

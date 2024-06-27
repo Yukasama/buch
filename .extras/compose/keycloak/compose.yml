@@ -57,6 +57,8 @@ services:
     user: keycloak:1000
     # --features=token-exchange
     entrypoint: ['/opt/keycloak/bin/kc.sh', 'start-dev']
+    networks:
+      - shared-network
     cap_drop: [ALL]
     deploy:
       resources:
@@ -66,3 +68,7 @@ services:
         reservations:
           cpus: '0.5'
           memory: 256M
+
+networks:
+  shared-network:
+    external: true
